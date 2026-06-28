@@ -1,2 +1,18 @@
 backend/venv/
 backend/.env
+backend/__pycache__/
+backend/app/__pycache__/
+backend/alembic/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables
+.env
+.env.local
+.env*.local
+
+# Misc
+.DS_Store
+*.log
