@@ -16,8 +16,17 @@ export default async function Home() {
   return (
     <main style={{ padding: "2rem", fontFamily: "sans-serif" }}>
       <h1>Hold the Frame</h1>
-      <p>Movies returned from API: {movies.length}</p>
-      <pre>{JSON.stringify(movies, null, 2)}</pre>
+      {movies.map((movie: any) => (
+        <div key={movie.id} style={{ marginBottom: "2rem" }}>
+          <h2>{movie.title} ({movie.year})</h2>
+          <p>{movie.studio}</p>
+          <img
+            src={movie.cover_image_url}
+            alt={movie.title}
+            style={{ width: "300px", borderRadius: "8px" }}
+          />
+        </div>
+      ))}
     </main>
   );
 }
