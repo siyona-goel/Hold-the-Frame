@@ -1,28 +1,18 @@
 import asyncio
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import engine, Base, AsyncSessionLocal
+from sqlalchemy import select
+from app.database import AsyncSessionLocal
 from app.models.models import Movie, Frame
 
-async def seed():
+async def seed_frames():
     async with AsyncSessionLocal() as session:
         async with session.begin():
-            from sqlalchemy import select
-            result = await session.execute(select(Movie))
-            existing = result.scalars().all()
-
-            if existing:
-                print("Database already has movies, skipping seed.")
-                return
-
-            movie = Movie(
-                title="The Princess and the Frog",
-                year=2009,
-                studio="Walt Disney Animation Studios",
-                cover_image_url="https://res.cloudinary.com/dycmsdxhi/image/upload/v1782737801/the_princess_and_the_frog_xveljl.jpg",
-                slug="princess-and-the-frog",
+            result = await session.execute(
+                select(Movie).where(Movie.slug == "princess-and-the-frog")
             )
-            session.add(movie)
-            await session.flush()  # so movie.id is available
+            movie = result.scalar_one_or_none()
+            if not movie:
+                print("Movie not found, seed the movie first.")
+                return
 
             frames = [
                 Frame(
@@ -62,6 +52,6 @@ async def seed():
                 ),
             ]
             session.add_all(frames)
-            print("Seeded 1 movie with 5 frames.")
+            print("Seeded 5 frames.")
 
-asyncio.run(seed())
+asyncio.run(seed_frames())

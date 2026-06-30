@@ -1,0 +1,24 @@
+.main {
+  min-height: 100vh;
+  padding: 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heading {
+  font-family: var(--font-display), serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1.1;
+  align-self: flex-start;
+}
+
+.subheading {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1rem;
+  color: var(--text-muted);
+  align-self: flex-start;
+  margin-bottom: 3rem;
+}

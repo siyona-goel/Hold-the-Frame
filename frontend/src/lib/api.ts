@@ -8,7 +8,10 @@ export async function getMovies() {
 
 export async function getMovie(slug: string) {
   const res = await fetch(`${API_URL}/movies/${slug}`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch movie");
+  if (!res.ok) {
+    console.error("getMovie failed:", res.status, await res.text());
+    throw new Error("Failed to fetch movie");
+  }
   return res.json();
 }
 

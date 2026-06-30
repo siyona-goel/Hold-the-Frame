@@ -1,9 +1,10 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 from app.database import AsyncSessionLocal
-from app.models.models import Movie
+from app.models.models import Movie, Frame
 
 app = FastAPI(title="Hold the Frame API")
 
@@ -12,7 +13,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://*.vercel.app",
-        ],
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,3 +42,58 @@ async def get_movies(db: AsyncSession = Depends(get_db)):
         }
         for m in movies
     ]
+
+@app.get("/movies/{slug}")
+async def get_movie(slug: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Movie).where(Movie.slug == slug))
+    movie = result.scalar_one_or_none()
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+    return {
+        "id": movie.id,
+        "title": movie.title,
+        "year": movie.year,
+        "studio": movie.studio,
+        "cover_image_url": movie.cover_image_url,
+        "slug": movie.slug,
+    }
+
+@app.get("/movies/{slug}/frames")
+async def get_frames(slug: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Movie).where(Movie.slug == slug))
+    movie = result.scalar_one_or_none()
+    if not movie:
+        raise HTTPException(status_code=404, detail="Movie not found")
+
+    result = await db.execute(
+        select(Frame)
+        .where(Frame.movie_id == movie.id)
+        .order_by(Frame.display_order)
+    )
+    frames = result.scalars().all()
+    return [
+        {
+            "id": f.id,
+            "movie_id": f.movie_id,
+            "image_url": f.image_url,
+            "timestamp_label": f.timestamp_label,
+            "description": f.description,
+            "display_order": f.display_order,
+        }
+        for f in frames
+    ]
+
+@app.get("/frames/{frame_id}")
+async def get_frame(frame_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(Frame).where(Frame.id == frame_id))
+    frame = result.scalar_one_or_none()
+    if not frame:
+        raise HTTPException(status_code=404, detail="Frame not found")
+    return {
+        "id": frame.id,
+        "movie_id": frame.movie_id,
+        "image_url": frame.image_url,
+        "timestamp_label": frame.timestamp_label,
+        "description": frame.description,
+        "display_order": frame.display_order,
+    }
