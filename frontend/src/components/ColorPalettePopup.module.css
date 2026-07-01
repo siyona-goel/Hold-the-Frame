@@ -1,0 +1,110 @@
+/* ── Backdrop ──
+   Full screen overlay. Semi-transparent black dims the page. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Popup container ──
+   Sized to match the frame image aspect ratio. Relative so children
+   (the palette card and close button) can be absolutely positioned. */
+.popup {
+  position: relative;
+  width: 90vw;
+  max-width: 900px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ── Background image ──
+   The frame, dimmed — visible behind the palette card. */
+.backgroundImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Dim it further than the backdrop already does */
+  opacity: 0.45;
+  filter: brightness(0.7);
+}
+
+/* ── Frosted palette card ──
+   Centered over the image. Frosted glass via backdrop-filter. */
+.paletteCard {
+  position: absolute;
+  /* Center vertically and horizontally within the popup */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  /* Frosted glass — change rgba alpha to adjust opacity of the glass */
+  background: rgba(220, 215, 210, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+}
+
+/* Row of color swatches */
+.swatchRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  /* gap: 1rem; */
+}
+
+/* One swatch + its label */
+.swatchGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* The circle ──
+   Change --swatch-size to make circles bigger/smaller */
+.swatch {
+  --swatch-size: 130px;
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  border-radius: 50%;
+  /* Subtle shadow so light-colored swatches don't disappear into the card */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Hex label below each circle */
+.hexLabel {
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  letter-spacing: 0.03em;
+}
+
+/* ── Close button ──
+   Top-right corner of the popup */
+.closeButton {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+
+.closeButton:hover {
+  background: rgba(0, 0, 0, 0.8);
+}

@@ -50,8 +50,15 @@ async def seed_frames():
                     description="Mama Odie's entrance",
                     display_order=4,
                 ),
+                Frame(
+                    movie_id=movie.id,
+                    image_url="https://res.cloudinary.com/dycmsdxhi/image/upload/v1782895429/frame-6_kqdg9d.jpg",
+                    timestamp_label="1:05:39",
+                    description="Dig a little deeper",
+                    display_order=5,
+                ),
             ]
             session.add_all(frames)
-            print("Seeded 5 frames.")
+            # print("Seeded 5 frames.")
 
 asyncio.run(seed_frames())

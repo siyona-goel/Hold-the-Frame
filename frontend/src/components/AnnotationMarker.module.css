@@ -1,0 +1,111 @@
+/* ── Marker container ──
+   Absolutely positioned over the frame image.
+   translate(-50%, -50%) ensures the dot centers on the exact coordinate. */
+.markerContainer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  /* High z-index so markers sit above the image */
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* ── The dot ──
+   White circle with gold border, matching the mockup detail.
+   Change --dot-size to make markers bigger/smaller.
+   Change border-color to adjust the ring color. */
+.dot {
+  --dot-size: 22px;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  background: white;
+  /* Gold border — same color as the connecting line and annotation box */
+  border: 2.5px solid #C17F24;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hover: subtle pulse scale */
+.markerContainer:hover .dot {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px rgba(193, 127, 36, 0.25);
+}
+
+/* Active (clicked/pinned): slightly larger, stronger glow */
+.dotActive {
+  transform: scale(1.15) !important;
+  box-shadow: 0 0 0 6px rgba(193, 127, 36, 0.35) !important;
+}
+
+/* ── SVG connector line ──
+   Positioned absolutely so it doesn't affect layout flow. */
+.connectorSvg {
+  position: absolute;
+  /* Vertically centered on the dot */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* line shouldn't intercept mouse events */
+  z-index: 1;
+}
+
+/* ── Annotation box ──
+   Gold-filled box with white text, matching the mockup. */
+.annotationBox {
+  position: absolute;
+  /* Vertically: center the box on the end of the connector line */
+  top: 50%;
+  transform: translateY(-100%);
+  width: 220px;
+  background: #C17F24;     /* gold fill — change this to adjust box color */
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  pointer-events: none;
+
+  /* Hidden by default */
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* Box placed to the right of the marker */
+.boxRight {
+  left: 130px;   /* offset past the connector SVG */
+}
+
+/* Box placed to the left of the marker */
+.boxLeft {
+  right: 130px;
+}
+
+/* Hover preview: partially visible */
+.boxVisible {
+  opacity: 0.75;
+}
+
+/* Clicked/pinned: fully visible */
+.boxActive {
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+/* Small category label above the annotation text */
+.category {
+  display: block;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.35rem;
+}
+
+/* The annotation content text */
+.content {
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: white;
+  line-height: 1.5;
+  margin: 0;
+}

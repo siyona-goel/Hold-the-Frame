@@ -31,3 +31,14 @@ export interface PaletteColor {
   hex_value: string;
   display_order: number;
 }
+
+export interface FrameDetail {
+  id: number;
+  movie_id: number;
+  image_url: string;
+  timestamp_label: string;
+  description: string | null;
+  display_order: number;
+  annotations: Annotation[];
+  palette_colors: PaletteColor[];
+}

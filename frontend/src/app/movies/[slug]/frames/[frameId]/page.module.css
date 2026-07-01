@@ -1,0 +1,116 @@
+/* ── Page shell ── */
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Generous horizontal padding creates the black side bars seen in the mockup */
+  padding: 1.5rem 2rem;
+  gap: 1.25rem;
+}
+
+/* ── Top bar: Back to Gallery (left) + Timestamp (right) ── */
+.topBar {
+  width: 100%;
+  /* max-width: 1000px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display), serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  transition: color var(--transition);
+}
+
+.backLink:hover {
+  color: var(--gold);
+}
+
+.timestamp {
+  font-family: var(--font-display), serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  /* Letter-spacing gives it the slightly clinical data-label feel from the mockup */
+  letter-spacing: 0.02em;
+}
+
+/* ── Frame wrapper ──
+   position:relative is essential — markers are absolutely positioned
+   as percentages of this element's width and height. */
+.frameWrapper {
+  position: relative;
+  /* Max width keeps the frame from stretching too wide on large screens */
+  width: 100%;
+  max-width: 1000px;
+  border-radius: 12px;
+  overflow: visible; /* Allow annotation boxes to extend outside the image */
+}
+
+.frameImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+/* ── Bottom bar ── */
+.bottomBar {
+  width: 100%;
+  /* max-width: 1000px; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}
+
+/* Spacer mirrors the paletteButton width to keep moreScenesGroup centered */
+.bottomSpacer {
+  flex: 1;
+}
+
+.moreScenesGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.moreScenesLabel {
+  font-family: var(--font-display), serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  /* Muted white — present but not competing with the frame */
+  color: #ffffff8c;
+}
+
+/* ── View Color Palette button ── */
+.paletteButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display), serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  transition: color var(--transition);
+  flex: 1;
+  justify-content: flex-end;  
+}
+
+.paletteButton:hover {
+    color: var(--gold);
+    /* opacity: 0.75; */
+}

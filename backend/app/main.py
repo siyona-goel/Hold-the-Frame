@@ -85,10 +85,18 @@ async def get_frames(slug: str, db: AsyncSession = Depends(get_db)):
 
 @app.get("/frames/{frame_id}")
 async def get_frame(frame_id: int, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Frame).where(Frame.id == frame_id))
+    result = await db.execute(
+        select(Frame)
+        .where(Frame.id == frame_id)
+        .options(
+            selectinload(Frame.annotations),
+            selectinload(Frame.palette_colors)
+        )
+    )
     frame = result.scalar_one_or_none()
     if not frame:
         raise HTTPException(status_code=404, detail="Frame not found")
+
     return {
         "id": frame.id,
         "movie_id": frame.movie_id,
@@ -96,4 +104,24 @@ async def get_frame(frame_id: int, db: AsyncSession = Depends(get_db)):
         "timestamp_label": frame.timestamp_label,
         "description": frame.description,
         "display_order": frame.display_order,
+        "annotations": [
+            {
+                "id": a.id,
+                "frame_id": a.frame_id,
+                "x_position": a.x_position,
+                "y_position": a.y_position,
+                "content": a.content,
+                "category": a.category.value,
+            }
+            for a in sorted(frame.annotations, key=lambda a: a.id)
+        ],
+        "palette_colors": [
+            {
+                "id": c.id,
+                "frame_id": c.frame_id,
+                "hex_value": c.hex_value,
+                "display_order": c.display_order,
+            }
+            for c in sorted(frame.palette_colors, key=lambda c: c.display_order)
+        ],
     }

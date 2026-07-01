@@ -23,6 +23,9 @@ export async function getFrames(movieSlug: string) {
 
 export async function getFrame(frameId: number) {
   const res = await fetch(`${API_URL}/frames/${frameId}`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to fetch frame");
+  if (!res.ok) {
+    console.error("getFrame failed:", res.status, await res.text());
+    throw new Error("Failed to fetch frame");
+  }
   return res.json();
 }
