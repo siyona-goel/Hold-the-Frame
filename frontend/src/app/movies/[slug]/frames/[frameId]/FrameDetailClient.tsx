@@ -99,7 +99,7 @@ export default function FrameDetailClient({
           aria-label="View color palette"
         >
           {/* Palette icon */}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12c0 5.52 4.48 10 10 10 
               1.1 0 2-.9 2-2 0-.54-.21-1.03-.55-1.4-.32-.36-.52-.84-.52-1.36 
               0-1.1.9-2 2-2h2.35C19.87 15.24 22 13.76 22 12c0-5.52-4.48-10-10-10z"/>

@@ -1,94 +1,147 @@
 /* ── Marker container ──
-   Absolutely positioned over the frame image.
-   translate(-50%, -50%) ensures the dot centers on the exact coordinate. */
+   Centered precisely on the coordinate. */
 .markerContainer {
   position: absolute;
   transform: translate(-50%, -50%);
-  /* High z-index so markers sit above the image */
   z-index: 10;
   cursor: pointer;
 }
 
-/* ── The dot ──
-   White circle with gold border, matching the mockup detail.
-   Change --dot-size to make markers bigger/smaller.
-   Change border-color to adjust the ring color. */
+/* ── Dot ──
+   White fill, gold border.
+   Adjust --dot-size to resize, border-color to recolor. */
 .dot {
   --dot-size: 22px;
   width: var(--dot-size);
   height: var(--dot-size);
   border-radius: 50%;
   background: white;
-  /* Gold border — same color as the connecting line and annotation box */
   border: 2.5px solid #C17F24;
   transition: transform 200ms ease, box-shadow 200ms ease;
   position: relative;
   z-index: 2;
 }
 
-/* Hover: subtle pulse scale */
 .markerContainer:hover .dot {
   transform: scale(1.2);
   box-shadow: 0 0 0 4px rgba(193, 127, 36, 0.25);
 }
 
-/* Active (clicked/pinned): slightly larger, stronger glow */
 .dotActive {
   transform: scale(1.15) !important;
   box-shadow: 0 0 0 6px rgba(193, 127, 36, 0.35) !important;
 }
 
-/* ── SVG connector line ──
-   Positioned absolutely so it doesn't affect layout flow. */
-.connectorSvg {
+/* ── Connector ──
+   A single div forming an L-shape using two borders on adjacent sides.
+   Width = horizontal arm length. Height = vertical arm length.
+   Change these two values to adjust how far the line travels. */
+.connector {
   position: absolute;
-  /* Vertically centered on the dot */
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none; /* line shouldn't intercept mouse events */
+  width: 60px;    /* horizontal arm length — adjust this */
+  height: 50px;   /* vertical arm length — adjust this */
+  pointer-events: none;
   z-index: 1;
 }
 
+/* 
+  RIGHT + BELOW: L goes right then down
+  - Anchored to top-left of dot center
+  - Border on left (vertical) and bottom (horizontal turn)
+*/
+.connectorRight.connectorBelow {
+  left: 50%;
+  top: 50%;
+  border-left: 2px solid #C17F24;
+  border-bottom: 2px solid #C17F24;
+}
+
+/*
+  RIGHT + ABOVE: L goes right then up
+  - Anchored to bottom-left of dot center  
+  - Border on left (vertical) and top (horizontal turn)
+*/
+.connectorRight.connectorAbove {
+  left: 50%;
+  bottom: 50%;
+  border-left: 2px solid #C17F24;
+  border-top: 2px solid #C17F24;
+}
+
+/*
+  LEFT + BELOW: L goes left then down
+  - Anchored to top-right of dot center
+  - Border on right (vertical) and bottom (horizontal turn)
+*/
+.connectorLeft.connectorBelow {
+  right: 50%;
+  top: 50%;
+  border-right: 2px solid #C17F24;
+  border-bottom: 2px solid #C17F24;
+}
+
+/*
+  LEFT + ABOVE: L goes left then up
+  - Anchored to bottom-right of dot center
+  - Border on right (vertical) and top (horizontal turn)
+*/
+.connectorLeft.connectorAbove {
+  right: 50%;
+  bottom: 50%;
+  border-right: 2px solid #C17F24;
+  border-top: 2px solid #C17F24;
+}
+
 /* ── Annotation box ──
-   Gold-filled box with white text, matching the mockup. */
+   Absolutely positioned at the open end of the L.
+   Each combination of boxLeft/Right + boxAbove/Below places it
+   at the correct corner so it always sits at the tip of the connector. */
 .annotationBox {
   position: absolute;
-  /* Vertically: center the box on the end of the connector line */
-  top: 50%;
-  transform: translateY(-100%);
-  width: 220px;
-  background: #C17F24;     /* gold fill — change this to adjust box color */
+  width: 220px;         /* change to make boxes wider/narrower */
+  background: #C17F24;
   border-radius: 8px;
   padding: 0.75rem 1rem;
-  pointer-events: none;
-
-  /* Hidden by default */
-  opacity: 0;
+  border: 1.5px solid white;
+  opacity: 0.75;        /* hover preview opacity */
   transition: opacity 200ms ease;
+  pointer-events: none;
 }
 
-/* Box placed to the right of the marker */
-.boxRight {
-  left: 130px;   /* offset past the connector SVG */
-}
-
-/* Box placed to the left of the marker */
-.boxLeft {
-  right: 130px;
-}
-
-/* Hover preview: partially visible */
-.boxVisible {
-  opacity: 0.75;
-}
-
-/* Clicked/pinned: fully visible */
 .boxActive {
-  opacity: 1 !important;
+  opacity: 1;
   pointer-events: auto;
 }
 
-/* Small category label above the annotation text */
+/* Box at the bottom-right corner of the L */
+.boxRight.boxBelow {
+  left: 100%;
+  bottom: 0;
+  transform: translateY(50%);
+}
+
+/* Box at the top-right corner of the L */
+.boxRight.boxAbove {
+  left: 100%;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+/* Box at the bottom-left corner of the L */
+.boxLeft.boxBelow {
+  right: 100%;
+  bottom: 0;
+  transform: translateY(50%);
+}
+
+/* Box at the top-left corner of the L */
+.boxLeft.boxAbove {
+  right: 100%;
+  top: 0;
+  transform: translateY(-50%);
+}
+
+/* ── Category label ── */
 .category {
   display: block;
   font-family: var(--font-body), sans-serif;
@@ -100,7 +153,7 @@
   margin-bottom: 0.35rem;
 }
 
-/* The annotation content text */
+/* ── Annotation text ── */
 .content {
   font-family: var(--font-body), sans-serif;
   font-size: 0.85rem;
