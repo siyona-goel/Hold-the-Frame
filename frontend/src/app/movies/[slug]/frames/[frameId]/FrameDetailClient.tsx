@@ -7,6 +7,8 @@ import AnnotationMarker from "@/components/AnnotationMarker";
 import ColorPalettePopup from "@/components/ColorPalettePopup";
 import styles from "./page.module.css";
 
+const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
+
 export default function FrameDetailClient({
   frame,
   movie,
@@ -20,6 +22,9 @@ export default function FrameDetailClient({
   // Whether the color palette popup is visible
   const [paletteOpen, setPaletteOpen] = useState(false);
 
+  // Dev-only: stores the last clicked coordinate on the frame image
+  const [devCoords, setDevCoords] = useState<{ x: number; y: number } | null>(null);
+
   // Clicking a marker: if it's already active, close it; otherwise open it
   const handleMarkerClick = (id: number) => {
     setActiveAnnotationId((prev) => (prev === id ? null : id));
@@ -27,6 +32,15 @@ export default function FrameDetailClient({
 
   // Hovering a marker shows a preview — we track hovered id separately
   const [hoveredAnnotationId, setHoveredAnnotationId] = useState<number | null>(null);
+
+  // Dev-only: calculates percentage position of click within the image
+  const handleDevClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (!DEV_MODE) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setDevCoords({ x: parseFloat(x.toFixed(1)), y: parseFloat(y.toFixed(1)) });
+  };
 
   return (
     <main className={styles.main}>
@@ -56,8 +70,12 @@ export default function FrameDetailClient({
           src={frame.image_url}
           alt={`Frame at ${frame.timestamp_label}`}
           className={styles.frameImage}
-          /* Clicking anywhere on the image that isn't a marker clears the active annotation */
-          onClick={() => setActiveAnnotationId(null)}
+          onClick={(e) => {
+            handleDevClick(e);         // dev coordinate finder
+            setActiveAnnotationId(null); // clear active annotation
+          }}
+          // Show crosshair cursor in dev mode so it's obvious the tool is active
+          style={DEV_MODE ? { cursor: "crosshair" } : undefined}
         />
 
         {/* Render one marker per annotation */}
@@ -72,6 +90,25 @@ export default function FrameDetailClient({
             onClick={() => handleMarkerClick(annotation.id)}
           />
         ))}
+
+        {/* Dev coordinate display — only renders when NEXT_PUBLIC_DEV_MODE=true */}
+        {DEV_MODE && devCoords && (
+          <div className={styles.devCoordDisplay}>
+            <strong>x:</strong> {devCoords.x}% &nbsp;
+            <strong>y:</strong> {devCoords.y}%
+            <button
+              className={styles.devCopyButton}
+              onClick={(e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(
+                  `x_position=${devCoords.x}, y_position=${devCoords.y}`
+                );
+              }}
+            >
+              Copy
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Bottom bar ──

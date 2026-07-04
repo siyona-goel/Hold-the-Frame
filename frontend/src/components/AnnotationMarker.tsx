@@ -23,7 +23,19 @@ export default function AnnotationMarker({
   const boxVisible = isHovered || isActive;
 
   // Left half of image → box extends left. Right half → box extends right.
-  const boxOnLeft = annotation.x_position < 50;
+  // const boxOnLeft = annotation.x_position < 50;
+  // Edge proximity thresholds — if the marker is within this % of an edge,
+  // force the box to the opposite side to prevent overflow.
+  // Adjust these values if boxes still clip at your screen size.
+  const LEFT_EDGE_THRESHOLD = 15;   // if x < 25%, force box to the RIGHT
+  const RIGHT_EDGE_THRESHOLD = 85;  // if x > 75%, force box to the LEFT
+
+  const boxOnLeft =
+    annotation.x_position > RIGHT_EDGE_THRESHOLD
+      ? true                                    // too close to right edge → force left
+      : annotation.x_position < LEFT_EDGE_THRESHOLD
+      ? false                                   // too close to left edge → force right
+      : annotation.x_position < 50;            // middle zone → extend toward nearest edge
 
   // Below 65% down the image → connector goes up. Above → goes down.
   const boxAbove = annotation.y_position > 65;
