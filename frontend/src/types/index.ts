@@ -32,13 +32,21 @@ export interface PaletteColor {
   display_order: number;
 }
 
+export interface FrameImage {
+  id: number;
+  image_url: string;
+  is_primary: boolean;
+  display_order: number;
+}
+
 export interface FrameDetail {
   id: number;
   movie_id: number;
-  image_url: string;
+  image_url: string;           // primary image, used for carousel
   timestamp_label: string;
   description: string | null;
   display_order: number;
+  images: FrameImage[];        // all images, used for detail page
   annotations: Annotation[];
   palette_colors: PaletteColor[];
 }

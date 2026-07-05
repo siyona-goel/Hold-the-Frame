@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from app.database import AsyncSessionLocal
-from app.models.models import Movie, Frame
+from app.models.models import Movie, Frame, Annotation, PaletteColor, FrameImage
 
 app = FastAPI(title="Hold the Frame API")
 
@@ -90,7 +90,8 @@ async def get_frame(frame_id: int, db: AsyncSession = Depends(get_db)):
         .where(Frame.id == frame_id)
         .options(
             selectinload(Frame.annotations),
-            selectinload(Frame.palette_colors)
+            selectinload(Frame.palette_colors),
+            selectinload(Frame.images),
         )
     )
     frame = result.scalar_one_or_none()
@@ -104,6 +105,15 @@ async def get_frame(frame_id: int, db: AsyncSession = Depends(get_db)):
         "timestamp_label": frame.timestamp_label,
         "description": frame.description,
         "display_order": frame.display_order,
+        "images": [                            
+            {
+                "id": i.id,
+                "image_url": i.image_url,
+                "is_primary": i.is_primary,
+                "display_order": i.display_order,
+            }
+            for i in sorted(frame.images, key=lambda i: i.display_order)
+        ],
         "annotations": [
             {
                 "id": a.id,

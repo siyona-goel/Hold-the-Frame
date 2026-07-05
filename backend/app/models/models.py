@@ -71,6 +71,7 @@ class Frame(Base):
     movie = relationship("Movie", back_populates="frames")
     annotations = relationship("Annotation", back_populates="frame", cascade="all, delete-orphan")
     palette_colors = relationship("PaletteColor", back_populates="frame", cascade="all, delete-orphan")
+    images = relationship("FrameImage", back_populates="frame", cascade="all, delete-orphan")
 
 
 # ---------------------------------------------------------------------------
@@ -114,3 +115,21 @@ class PaletteColor(Base):
     display_order = Column(Integer, nullable=False, default=0)
 
     frame = relationship("Frame", back_populates="palette_colors")
+
+# ---------------------------------------------------------------------------
+# FrameImages
+# Allows a frame to have multiple images displayed side by side on the
+# detail page. is_primary=True is the image shown in the carousel.
+# display_order controls left-to-right order on the detail page.
+# ---------------------------------------------------------------------------
+
+class FrameImage(Base):
+    __tablename__ = "frame_images"
+
+    id = Column(Integer, primary_key=True, index=True)
+    frame_id = Column(Integer, ForeignKey("frames.id"), nullable=False)
+    image_url = Column(String, nullable=False)        # Cloudinary URL
+    is_primary = Column(Boolean, nullable=False, default=False)
+    display_order = Column(Integer, nullable=False, default=0)
+
+    frame = relationship("Frame", back_populates="images")

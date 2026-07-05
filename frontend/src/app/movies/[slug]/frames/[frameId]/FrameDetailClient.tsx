@@ -34,9 +34,12 @@ export default function FrameDetailClient({
   const [hoveredAnnotationId, setHoveredAnnotationId] = useState<number | null>(null);
 
   // Dev-only: calculates percentage position of click within the image
-  const handleDevClick = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleDevClick = (e: React.MouseEvent<HTMLDivElement | HTMLImageElement>) => {
     if (!DEV_MODE) return;
-    const rect = e.currentTarget.getBoundingClientRect();
+    // Always measure relative to the frameWrapper, not the clicked element
+    const wrapper = document.querySelector(`.${styles.frameWrapper}`) as HTMLElement;
+    if (!wrapper) return;
+    const rect = wrapper.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setDevCoords({ x: parseFloat(x.toFixed(1)), y: parseFloat(y.toFixed(1)) });
@@ -62,21 +65,43 @@ export default function FrameDetailClient({
         </span>
       </div>
 
-      {/* ── Frame image + annotation markers ──
+      {/* ── Frame image(s) + annotation markers ──
           The wrapper is position:relative so markers can be absolutely
           positioned as percentages of the image dimensions. */}
       <div className={styles.frameWrapper}>
-        <img
-          src={frame.image_url}
-          alt={`Frame at ${frame.timestamp_label}`}
-          className={styles.frameImage}
-          onClick={(e) => {
-            handleDevClick(e);         // dev coordinate finder
-            setActiveAnnotationId(null); // clear active annotation
-          }}
-          // Show crosshair cursor in dev mode so it's obvious the tool is active
-          style={DEV_MODE ? { cursor: "crosshair" } : undefined}
-        />
+
+        {frame.images && frame.images.length > 0 ? (
+          /* Multi-image layout: images side by side */
+          <div
+            className={styles.multiImageWrapper}
+            onClick={(e) => {
+              handleDevClick(e);
+              setActiveAnnotationId(null);
+            }}
+            style={DEV_MODE ? { cursor: "crosshair" } : undefined}
+          >
+            {frame.images.map((img) => (
+              <img
+                key={img.id}
+                src={img.image_url}
+                alt={`Frame at ${frame.timestamp_label}`}
+                className={styles.frameImageMulti}                
+              />
+            ))}
+          </div>
+        ) : (
+          /* Single image layout: existing behavior */
+          <img
+            src={frame.image_url}
+            alt={`Frame at ${frame.timestamp_label}`}
+            className={styles.frameImage}
+            onClick={(e) => {
+              handleDevClick(e);
+              setActiveAnnotationId(null);
+            }}
+            style={DEV_MODE ? { cursor: "crosshair" } : undefined}
+          />
+        )}
 
         {/* Render one marker per annotation */}
         {frame.annotations.map((annotation) => (
