@@ -16,6 +16,7 @@ MOVIE = {
     "studio": "Walt Disney Animation Studios",
     "cover_image_url": "https://res.cloudinary.com/dycmsdxhi/image/upload/v1782737801/the_princess_and_the_frog_xveljl.jpg",
     "slug": "princess-and-the-frog",
+    "annotation_color": "#C17F24",
 }
 
 FRAMES = [
@@ -394,6 +395,7 @@ async def seed():
                 movie.year = MOVIE["year"]
                 movie.studio = MOVIE["studio"]
                 movie.cover_image_url = MOVIE["cover_image_url"]
+                movie.annotation_color = MOVIE["annotation_color"]
                 print(f"Updated movie: {movie.title}")
             else:
                 movie = Movie(**MOVIE)

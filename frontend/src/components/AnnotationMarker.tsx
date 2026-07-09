@@ -5,6 +5,7 @@ import styles from "./AnnotationMarker.module.css";
 
 interface Props {
   annotation: Annotation;
+  color: string;
   isHovered: boolean;
   isActive: boolean;
   onHoverEnter: () => void;
@@ -14,6 +15,7 @@ interface Props {
 
 export default function AnnotationMarker({
   annotation,
+  color,
   isHovered,
   isActive,
   onHoverEnter,
@@ -46,6 +48,7 @@ export default function AnnotationMarker({
       style={{
         left: `${annotation.x_position}%`,
         top: `${annotation.y_position}%`,
+        "--annotation-color": color,
       }}
       onClick={(e) => {
         e.stopPropagation();

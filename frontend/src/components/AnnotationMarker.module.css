@@ -16,7 +16,7 @@
   height: var(--dot-size);
   border-radius: 50%;
   background: white;
-  border: 2.5px solid #C17F24;
+  border: 2.5px solid var(--annotation-color);
   transition: transform 200ms ease, box-shadow 200ms ease;
   position: relative;
   z-index: 2;
@@ -24,12 +24,12 @@
 
 .markerContainer:hover .dot {
   transform: scale(1.2);
-  box-shadow: 0 0 0 4px rgba(193, 127, 36, 0.25);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--annotation-color) 25%, transparent);
 }
 
 .dotActive {
   transform: scale(1.15) !important;
-  box-shadow: 0 0 0 6px rgba(193, 127, 36, 0.35) !important;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--annotation-color) 35%, transparent) !important;
 }
 
 /* ── Connector ──
@@ -52,8 +52,8 @@
 .connectorRight.connectorBelow {
   left: 50%;
   top: 50%;
-  border-left: 2px solid #C17F24;
-  border-bottom: 2px solid #C17F24;
+  border-left: 2px solid var(--annotation-color);
+  border-bottom: 2px solid var(--annotation-color);
 }
 
 /*
@@ -64,8 +64,8 @@
 .connectorRight.connectorAbove {
   left: 50%;
   bottom: 50%;
-  border-left: 2px solid #C17F24;
-  border-top: 2px solid #C17F24;
+  border-left: 2px solid var(--annotation-color);
+  border-top: 2px solid var(--annotation-color);
 }
 
 /*
@@ -76,8 +76,8 @@
 .connectorLeft.connectorBelow {
   right: 50%;
   top: 50%;
-  border-right: 2px solid #C17F24;
-  border-bottom: 2px solid #C17F24;
+  border-right: 2px solid var(--annotation-color);
+  border-bottom: 2px solid var(--annotation-color);
 }
 
 /*
@@ -88,8 +88,8 @@
 .connectorLeft.connectorAbove {
   right: 50%;
   bottom: 50%;
-  border-right: 2px solid #C17F24;
-  border-top: 2px solid #C17F24;
+  border-right: 2px solid var(--annotation-color);
+  border-top: 2px solid var(--annotation-color);
 }
 
 /* ── Annotation box ──
@@ -99,7 +99,7 @@
 .annotationBox {
   position: absolute;
   width: 220px;         /* change to make boxes wider/narrower */
-  background: #C17F24;
+  background: var(--annotation-color);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   border: 1.5px solid white;

@@ -5,6 +5,7 @@ export interface Movie {
   studio: string;
   cover_image_url: string;
   slug: string;
+  annotation_color: string;
 }
 
 export interface Frame {

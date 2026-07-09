@@ -56,6 +56,7 @@ async def get_movie(slug: str, db: AsyncSession = Depends(get_db)):
         "studio": movie.studio,
         "cover_image_url": movie.cover_image_url,
         "slug": movie.slug,
+        "annotation_color": movie.annotation_color,
     }
 
 @app.get("/movies/{slug}/frames")

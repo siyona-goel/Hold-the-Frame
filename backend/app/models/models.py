@@ -37,6 +37,7 @@ class Movie(Base):
     year = Column(Integer, nullable=False)
     studio = Column(String, nullable=False)
     cover_image_url = Column(String, nullable=False)   # Cloudinary URL
+    annotation_color = Column(String(7), nullable=False, default="#C17F24")
     slug = Column(String, unique=True, nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

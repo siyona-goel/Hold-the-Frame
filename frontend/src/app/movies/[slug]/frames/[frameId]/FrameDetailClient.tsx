@@ -108,6 +108,7 @@ export default function FrameDetailClient({
           <AnnotationMarker
             key={annotation.id}
             annotation={annotation}
+            color={movie.annotation_color}
             isHovered={hoveredAnnotationId === annotation.id}
             isActive={activeAnnotationId === annotation.id}
             onHoverEnter={() => setHoveredAnnotationId(annotation.id)}
