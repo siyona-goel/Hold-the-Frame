@@ -45,11 +45,13 @@ export default function AnnotationMarker({
   return (
     <div
       className={styles.markerContainer}
-      style={{
-        left: `${annotation.x_position}%`,
-        top: `${annotation.y_position}%`,
-        "--annotation-color": color,
-      }}
+      style={
+        {
+          left: `${annotation.x_position}%`,
+          top: `${annotation.y_position}%`,
+          "--annotation-color": color,
+        } as React.CSSProperties
+      }
       onClick={(e) => {
         e.stopPropagation();
         onClick(e);
