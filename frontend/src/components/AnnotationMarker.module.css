@@ -7,6 +7,15 @@
   cursor: pointer;
 }
 
+/* Elevate hovered/active markers so their boxes stack above other markers. */
+.markerContainerHovered {
+  z-index: 15;
+}
+
+.markerContainerActive {
+  z-index: 20;
+}
+
 /* ── Dot ──
    White fill, gold border.
    Adjust --dot-size to resize, border-color to recolor. */

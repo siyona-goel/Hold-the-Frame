@@ -44,7 +44,10 @@ export default function AnnotationMarker({
 
   return (
     <div
-      className={styles.markerContainer}
+      className={`
+        ${styles.markerContainer}
+        ${isActive ? styles.markerContainerActive : isHovered ? styles.markerContainerHovered : ""}
+      `}
       style={
         {
           left: `${annotation.x_position}%`,
